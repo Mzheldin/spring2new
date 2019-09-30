@@ -37,7 +37,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="cartItem, itrStat : ${cart.getItems()}">
+            <tr th:each="cartItem, itrStat : ${cart.getItems().values()}">
                 <td th:text="${itrStat.index + 1}"/>
                 <td th:text="${cartItem.product.title}"/>
                 <td th:text="${cartItem.itemPrice}"/>

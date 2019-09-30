@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "orders_item")
@@ -18,10 +19,10 @@ public class OrderItem {
     private Long quantity;
 
     @Column(name = "item_price")
-    private Double itemPrice;
+    private BigDecimal itemPrice;
 
     @Column(name = "total_price")
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

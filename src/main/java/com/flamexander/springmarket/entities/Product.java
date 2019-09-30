@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class Product implements Serializable {
     @NotNull(message = "не может быть пустым")
     @DecimalMin(value = "0.01", message = "минимальное значение 0")
     @Digits(integer = 10, fraction = 2)
-    private double price;
+    private BigDecimal price;
 
     @Column(name = "create_at")
     @CreationTimestamp

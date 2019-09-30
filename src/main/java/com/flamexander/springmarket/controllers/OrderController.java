@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDateTime;
 
@@ -66,7 +67,7 @@ public class OrderController {
         order.setDeliveryAddress(deliverAddressService.getUserAddressById(deliveryAddressId));
         order.setPhoneNumber(phoneNumber);
         order.setDeliveryDate(LocalDateTime.now().plusDays(7));
-        order.setDeliveryPrice(0.0);
+        order.setDeliveryPrice(BigDecimal.valueOf(0.0));
         order = orderService.saveOrder(order);
         model.addAttribute("order", order);
         return "order-before-purchase";

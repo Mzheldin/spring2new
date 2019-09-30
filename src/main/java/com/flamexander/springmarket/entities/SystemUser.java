@@ -2,12 +2,14 @@ package com.flamexander.springmarket.entities;
 
 import com.flamexander.springmarket.validation.FieldMatch;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
+@NoArgsConstructor
 @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match")
 public class SystemUser {
     @NotNull(message = "not null check")
@@ -39,7 +41,4 @@ public class SystemUser {
     @NotNull(message = "is required")
     @Size(min = 1, message = "is required")
     private String phone;
-
-    public SystemUser() {
-    }
 }

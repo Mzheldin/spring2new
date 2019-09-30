@@ -18,9 +18,17 @@ import java.util.List;
 public class OrderService {
     private OrderRepository orderRepository;
 
+    private ShoppingCart cart;
+
     @Autowired
     public void setOrderRepository(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
+    }
+
+    @Autowired
+    public OrderService(OrderRepository orderRepository, ShoppingCart cart) {
+        this.orderRepository = orderRepository;
+        this.cart = cart;
     }
 
     @Transactional
@@ -30,7 +38,7 @@ public class OrderService {
         order.setUser(user);
         order.setStatus(OrderStatus.CREATED);
         order.setPrice(cart.getTotalCost());
-        order.setOrderItems(new ArrayList<>(cart.getItems()));
+        order.setOrderItems(new ArrayList<>(cart.getItems().values()));
         for (OrderItem o : order.getOrderItems()) {
             o.setOrder(order);
         }
