@@ -40,9 +40,12 @@ public class Order {
     @Column(name = "delivery_price")
     private BigDecimal deliveryPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_address_id")
-    private DeliveryAddress deliveryAddress;
+//    @ManyToOne
+//    @JoinColumn(name = "delivery_address_id")
+//    private DeliveryAddress deliveryAddress;
+
+    @Column(name = "address")
+    private String address;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -58,13 +61,13 @@ public class Order {
     @CreationTimestamp
     private LocalDateTime updateAt;
 
-    public Order(User user, OrderStatus status, BigDecimal deliveryPrice, DeliveryAddress deliveryAddress, String phoneNumber, LocalDateTime deliveryDate) {
+    public Order(User user, OrderStatus status, BigDecimal deliveryPrice, String deliveryAddress, String phoneNumber, LocalDateTime deliveryDate) {
         this.user = user;
         this.orderItems = new ArrayList<>();
         this.status = status;
         this.price = new BigDecimal(0);
         this.deliveryPrice = deliveryPrice;
-        this.deliveryAddress = deliveryAddress;
+        this.address = deliveryAddress;
         this.phoneNumber = phoneNumber;
         this.deliveryDate = deliveryDate;
     }

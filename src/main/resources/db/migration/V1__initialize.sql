@@ -100,10 +100,11 @@ DROP TABLE IF EXISTS orders;
 
 CREATE TABLE orders (
   id	                INT(11) NOT NULL AUTO_INCREMENT,
-  user_id               INT(11) NOT NULL,
+  user_id               INT(11),
   price                 DECIMAL(8,2) NOT NULL,
   delivery_price        DECIMAL(8,2) NOT NULL,
-  delivery_address_id   INT(11) NOT NULL,
+--   delivery_address_id   INT(11) NOT NULL,
+address             VARCHAR(100) NOT NULL,
   phone_number          VARCHAR(20) NOT NULL,
   status                VARCHAR(12) NOT NULL,
   delivery_date         TIMESTAMP NOT NULL,
@@ -111,9 +112,9 @@ CREATE TABLE orders (
   update_at             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   CONSTRAINT FK_USER_ID FOREIGN KEY (user_id)
-  REFERENCES users (id),
-  CONSTRAINT FK_DELIVERY_ADDRESS_ID FOREIGN KEY (delivery_address_id)
-  REFERENCES delivery_addresses (id)
+  REFERENCES users (id)
+--   CONSTRAINT FK_DELIVERY_ADDRESS_ID FOREIGN KEY (delivery_address_id)
+--   REFERENCES delivery_addresses (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 DROP TABLE IF EXISTS orders_item;
@@ -131,6 +132,17 @@ CREATE TABLE orders_item (
   CONSTRAINT FK_PRODUCT_ID_ORD_IT FOREIGN KEY (product_id)
   REFERENCES products (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+DROP TABLE IF EXISTS temp_users;
+
+CREATE TABLE temp_users (
+    id                    INT(11) NOT NULL AUTO_INCREMENT,
+    username              VARCHAR(50) NOT NULL,
+    email                 VARCHAR(50) NOT NULL,
+    phone                 VARCHAR(15) NOT NULL,
+    address               VARCHAR(500) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
