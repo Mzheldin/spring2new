@@ -32,7 +32,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="orderItem : ${cart.items}">
+            <tr th:each="orderItem : ${cart.items.values()}">
                 <td th:text="${orderItem.product.title}"/>
                 <td th:text="${orderItem.quantity}"/>
                 <td th:text="${orderItem.totalPrice}"/>
@@ -44,14 +44,26 @@
             </tr>
             </tbody>
         </table>
-
+        <div sec:authorize="isAnonymous()">
+            <span>Укажите Ваше имя</span>
+            <input type="text" name="userName" class="form-control input-sm">
+            <br>
+        </div>
         <span>Укажите адрес доставки</span>
-        <select class="form-control" name="deliveryAddress" id="dropDeliveryAddresses">
-            <option th:each="o : ${deliveryAddresses}" th:value="${o.id}" th:text="${o.address}"></option>
-        </select>
+        <input sec:authorize="isAnonymous()" type="text" name="deliveryAddress" class="form-control input-sm">
+        <div sec:authorize="isAuthenticated()">
+            <select class="form-control" name="deliveryAddressId" id="dropDeliveryAddresses">
+                <option th:each="o : ${deliveryAddresses}" th:value="${o.id}" th:text="${o.address}"></option>
+            </select>
+        </div>
         <br>
         <span>Укажите номер телефона</span>
         <input type="text" name="phoneNumber" class="form-control input-sm">
+        <br>
+        <div sec:authorize="isAnonymous()">
+            <span>Укажите адрес электронной почты</span>
+            <input type="email" name="email" class="form-control input-sm">
+        </div>
         <br>
         <div class="col-sm-6 controls">
             <button type="submit" class="btn btn-primary">Готово</button>
