@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org">
-<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <title>GeekWinterMarket</title>
+    <title>September Market</title>
 
     <link rel="icon" type="image/png" th:href="@{/favicon.ico}"/>
 
@@ -16,12 +16,12 @@
 
 <body>
 
-<div th:replace="~{navigation :: navi(Home)}" />
-
 <div class="container">
-    <br>
-    <h1>Spring Market</h1>
-    Добро пожаловать в наш интернет-магазин, работающий для Вас с 2018 года!
+    <div th:replace="~{navigation :: navigation(Home)}" />
+
+    <h1>September Market</h1>
+
+    Добро пожаловать в наш интернет-магазин, работающий для Вас с 2019 года!
 </div>
 </body>
 </html>

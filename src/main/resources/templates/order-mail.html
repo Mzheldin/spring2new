@@ -20,7 +20,7 @@
         </thead>
 
         <tbody>
-        <tr th:each="orderItem, iterStat : ${order.orderItems}">
+        <tr th:each="orderItem, iterStat : ${order.items}">
             <td style="border-top: 1px solid #dee2e6; padding: 20px; text-align: center;"
                 th:styleappend="${iterStat.odd} ? 'background-color: rgba(0,0,0,.075);'"
                 th:text="${orderItem.product.title}"/>
