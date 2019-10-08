@@ -8,6 +8,8 @@ import com.geekbrains.septembermarket.services.OrderService;
 import com.geekbrains.septembermarket.services.UserService;
 import com.geekbrains.septembermarket.utils.Cart;
 import com.geekbrains.septembermarket.utils.SystemUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ public class OrderController {
     private OrderService orderService;
     private UserService userService;
     private MailService mailService;
+    private Logger log = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -33,16 +36,18 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    @Autowired
     public void setMailService(MailService mailService) {
         this.mailService = mailService;
     }
 
     @GetMapping("/create")
     public String createOrder(Model model, Principal principal) {
-//        if (principal == null || principal.getName() == null){
-//            model.addAttribute("systemUser", new SystemUser());
-//            return "registration-form";
-//        }
+        if (principal == null || principal.getName() == null){
+            log.warn("+++ Warn");
+            model.addAttribute("systemUser", new SystemUser());
+            return "short-registration-form";
+        }
         User user = userService.findByUsername(principal.getName());
         Order order = orderService.createOrder(user);
         mailService.sendOrderMail(order);

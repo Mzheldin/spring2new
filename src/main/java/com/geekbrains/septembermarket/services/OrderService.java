@@ -4,18 +4,26 @@ import com.geekbrains.septembermarket.entities.Order;
 import com.geekbrains.septembermarket.entities.User;
 import com.geekbrains.septembermarket.repositories.OrderRepository;
 import com.geekbrains.septembermarket.utils.Cart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OrderService {
-    private OrderRepository orderRepository;
 
+    private Logger log = LoggerFactory.getLogger(OrderService.class);
+    private OrderRepository orderRepository;
     private Cart cart;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    public void setOrderRepository(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
 
     @Autowired
     public OrderService(OrderRepository orderRepository, Cart cart) {
