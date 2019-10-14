@@ -10,9 +10,9 @@ import com.geekbrains.septembermarket.utils.Cart;
 import com.geekbrains.septembermarket.utils.SystemUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -33,19 +33,33 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    @Autowired
     public void setMailService(MailService mailService) {
         this.mailService = mailService;
     }
 
     @GetMapping("/create")
-    public String createOrder(Model model, Principal principal) {
-//        if (principal == null || principal.getName() == null){
-//            model.addAttribute("systemUser", new SystemUser());
-//            return "registration-form";
-//        }
-        User user = userService.findByUsername(principal.getName());
-        Order order = orderService.createOrder(user);
-        mailService.sendOrderMail(order);
+    public String createOrder(Principal principal,
+                              @RequestParam(name = "phone") String phone,
+                              @RequestParam(name = "firstName") String firstName,
+                              @RequestParam(name = "address") String address) {
+        User user = null;
+        if (principal != null) {
+            user = userService.findByPhone(principal.getName());
+        } else {
+            if (userService.isUserExist(phone)) {
+                user = userService.findByPhone(phone);
+            } else {
+                SystemUser systemUser = new SystemUser();
+                systemUser.setPhone(phone);
+                systemUser.setFirstName(firstName);
+                user = userService.save(systemUser);
+            }
+        }
+        Order order = orderService.createOrder(user, phone, address);
+        if (user.getEmail() != null) {
+            mailService.sendOrderMail(order);
+        }
         return "redirect:/shop";
     }
 }

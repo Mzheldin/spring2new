@@ -2,6 +2,7 @@ package com.geekbrains.septembermarket.controllers;
 
 import com.geekbrains.septembermarket.entities.Product;
 import com.geekbrains.septembermarket.services.ProductsService;
+import com.geekbrains.septembermarket.utils.Cart;
 import com.geekbrains.septembermarket.utils.ProductsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,6 +45,7 @@ public class ShopController {
         }
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("filters", productsFilter.getFiltersString());
+
         Page<Product> page = productsService.findAllByPagingAndFiltering(productsFilter.getSpecification(), PageRequest.of(pageNumber - 1, 10, Sort.Direction.ASC, "id"));
         model.addAttribute("page", page);
         return "shop";

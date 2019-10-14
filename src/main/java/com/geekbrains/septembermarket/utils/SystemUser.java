@@ -13,9 +13,9 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match")
 public class SystemUser {
-    @NotNull(message = "not null check")
-    @Size(min = 3, message = "username length must be greater than 2 symbols")
-    private String username;
+    @NotNull(message = "is required")
+    @Size(min = 8, message = "is required")
+    private String phone;
 
     @NotNull(message = "is required")
     @Size(min = 4, message = "password is too short")
@@ -37,8 +37,4 @@ public class SystemUser {
     @Size(min = 4, message = "is required")
     @Email
     private String email;
-
-    @NotNull(message = "is required")
-    @Size(min = 8, message = "is required")
-    private String phone;
 }

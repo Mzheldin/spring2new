@@ -1,7 +1,9 @@
 package com.geekbrains.septembermarket.controllers;
 
 import com.geekbrains.septembermarket.entities.Product;
+import com.geekbrains.septembermarket.entities.User;
 import com.geekbrains.septembermarket.services.ProductsService;
+import com.geekbrains.septembermarket.services.UserService;
 import com.geekbrains.septembermarket.utils.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +28,7 @@ import java.util.List;
 @RequestMapping("/cart")
 public class CartController {
     private ProductsService productsService;
-
+    private UserService userService;
     private Cart cart;
 
     @Autowired
@@ -34,13 +37,22 @@ public class CartController {
     }
 
     @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
     public void setCart(Cart cart) {
         this.cart = cart;
     }
 
     @GetMapping("")
-    public String show(Model model, HttpSession session) {
-//        Cart cartX = (Cart) session.getAttribute("scopedTarget.cart");
+    public String show(Model model, Principal principal) {
+        if (principal != null) {
+            User user = userService.findByPhone(principal.getName());
+            model.addAttribute("phone", user.getPhone());
+            model.addAttribute("firstName", user.getFirstName());
+        }
         model.addAttribute("items", cart.getItems().values());
         return "cart";
     }

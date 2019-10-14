@@ -1,12 +1,11 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   id                    bigserial,
-  username              varchar(50) NOT NULL,
-  password              varchar(80) NOT NULL,
-  first_name            VARCHAR(50) NOT NULL,
-  last_name             VARCHAR(50) NOT NULL,
-  email                 VARCHAR(50) NOT NULL,
-  phone                 VARCHAR(15) NOT NULL,
+  phone                 VARCHAR(15) NOT NULL UNIQUE,
+  password              VARCHAR(80),
+  email                 VARCHAR(50) UNIQUE,
+  first_name            VARCHAR(50),
+  last_name             VARCHAR(50),
   PRIMARY KEY (id)
 );
 
@@ -32,9 +31,9 @@ INSERT INTO roles (name)
 VALUES
 ('ROLE_USER'), ('ROLE_MANAGER'), ('ROLE_ADMIN');
 
-INSERT INTO users (username, password, first_name, last_name, email, phone)
+INSERT INTO users (phone, password, first_name, last_name, email)
 VALUES
-('admin','$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i','Admin','Admin','admin@gmail.com','+79881111111');
+('11111111','$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i','Admin','Admin','admin@gmail.com');
 
 INSERT INTO users_roles (user_id, role_id)
 VALUES
@@ -50,8 +49,15 @@ INSERT INTO products (title, price) VALUES
 ('Apples', 120.0);
 
 DROP TABLE IF EXISTS orders;
-CREATE TABLE orders (id bigserial PRIMARY KEY, user_id bigint, price numeric(8, 2), status varchar(255), created_at timestamp, updated_at timestamp, FOREIGN KEY (user_id) REFERENCES users (id));
+CREATE TABLE orders (id bigserial PRIMARY KEY, user_id bigint, price numeric(8, 2), phone varchar(15), address varchar(255), status varchar(255), created_at timestamp, updated_at timestamp, FOREIGN KEY (user_id) REFERENCES users (id));
 
 DROP TABLE IF EXISTS order_items;
 CREATE TABLE order_items (id bigserial PRIMARY KEY, order_id bigint, product_id bigint, quantity int, item_price numeric(8, 2),
 total_price numeric(8, 2), FOREIGN KEY (order_id) REFERENCES orders(id), FOREIGN KEY (product_id) REFERENCES products(id));
+
+DROP TABLE IF EXISTS products_images;
+CREATE TABLE products_images (id bigserial PRIMARY KEY, product_id bigint, path varchar(255), FOREIGN KEY (product_id) REFERENCES products(id));
+INSERT INTO products_images (product_id, path) VALUES
+(1, 'img_1.jpg'),
+(2, 'img_1.jpg'),
+(3, 'img_1.jpg');

@@ -35,6 +35,12 @@ public class Order {
     @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -47,8 +53,10 @@ public class Order {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public Order(User user) {
+    public Order(User user, String phone, String address) {
         this.user = user;
+        this.phone = phone;
+        this.address = address;
         this.items = new ArrayList<>();
         this.price = new BigDecimal(0);
     }

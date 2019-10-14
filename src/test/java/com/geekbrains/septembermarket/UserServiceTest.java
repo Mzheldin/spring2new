@@ -22,14 +22,14 @@ public class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
 
-    @Test
-    public void findOneUserTest() {
-        Mockito.doReturn(new User("userJohn", "J1o2h3n4s5o6n7", "John", "Johnson", "johnson@gmail.com"))
-                .when(userRepository)
-                .findOneByUsername("userJohn");
-        User userJohn = userService.findByUsername("userJohn");
-        Assert.assertNotNull(userJohn);
-        Mockito.verify(userRepository, Mockito.times(1)).findOneByUsername(ArgumentMatchers.eq("userJohn"));
-        Mockito.verify(userRepository, Mockito.times(1)).findOneByUsername(ArgumentMatchers.any(String.class));
-    }
+//    @Test
+//    public void findOneUserTest() {
+//        Mockito.doReturn(new User("userJohn", "J1o2h3n4s5o6n7", "John", "Johnson", "johnson@gmail.com"))
+//                .when(userRepository)
+//                .findOneByUsername("userJohn");
+//        User userJohn = userService.findByUsername("userJohn");
+//        Assert.assertNotNull(userJohn);
+//        Mockito.verify(userRepository, Mockito.times(1)).findOneByUsername(ArgumentMatchers.eq("userJohn"));
+//        Mockito.verify(userRepository, Mockito.times(1)).findOneByUsername(ArgumentMatchers.any(String.class));
+//    }
 }

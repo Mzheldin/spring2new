@@ -39,11 +39,11 @@ public class RegistrationController {
 
     @PostMapping("/process")
     public String processRegistrationForm(@Valid @ModelAttribute("systemUser") SystemUser systemUser, BindingResult bindingResult, Model model) {
-        String username = systemUser.getUsername();
+        String phone = systemUser.getPhone();
         if (bindingResult.hasErrors()) {
             return "registration-form";
         }
-        User existing = userService.findByUsername(username);
+        User existing = userService.findByPhone(phone);
         if (existing != null) {
             // theSystemUser.setUserName(null);
             model.addAttribute("systemUser", systemUser);
