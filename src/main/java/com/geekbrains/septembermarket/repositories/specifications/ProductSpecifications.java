@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 
 public class ProductSpecifications {
@@ -27,9 +28,7 @@ public class ProductSpecifications {
         };
     }
 
-    public static Specification<Product> categoryEquals(Category category) {
-        if (category != null)
-            return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), category);
-        return null;
+    public static Specification<Product> categoryEquals(Optional<Category> category) {
+        return category.map(value -> (Specification<Product>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), value)).orElse(null);
     }
 }

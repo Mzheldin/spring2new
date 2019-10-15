@@ -47,7 +47,7 @@ public class ProductsFilter {
         }
 
         if (request.getParameter("category") != null && !request.getParameter("category").isEmpty()){
-            specification = specification.and(ProductSpecifications.categoryEquals(categoryService.findOneByTitle(request.getParameter("category"))));
+            specification = specification.and(ProductSpecifications.categoryEquals(categoryService.findOneById(Long.parseLong(request.getParameter("category")))));
         }
 
         return filtersString;
