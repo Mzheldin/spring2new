@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+
+    <title th:text="#{history.title}"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <div th:replace="~{navigation :: navigation(Shop)}" />
+
+    <h1 th:text="#{history.title}"/>
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th th:text="#{history.orderId}"/>
+            <th th:text="#{history.orderDate}"/>
+            <th th:text="#{history.orderPrice}">
+            <th th:text="#{history.orderStatus}"/>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="history : ${histories}">
+            <td th:text="${history.getOrder().getId()}"/>
+            <td th:text="${history.getOrder().getCreatedAt()}"/>
+            <td th:text="${history.getOrder().getPrice()}"/>
+            <td th:text="${history.getOrder().getStatus().name()}"/>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

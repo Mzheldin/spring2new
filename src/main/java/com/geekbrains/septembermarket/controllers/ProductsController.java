@@ -2,6 +2,7 @@ package com.geekbrains.septembermarket.controllers;
 
 import com.geekbrains.septembermarket.entities.Product;
 import com.geekbrains.septembermarket.repositories.specifications.ProductSpecifications;
+import com.geekbrains.septembermarket.services.CategoryService;
 import com.geekbrains.septembermarket.services.ProductsService;
 import com.geekbrains.septembermarket.utils.ProductsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/products")
 public class ProductsController {
     private ProductsService productsService;
+    private CategoryService categoryService;
 
     @Autowired
     public void setProductsService(ProductsService productsService) {
         this.productsService = productsService;
+    }
+
+    @Autowired
+    public void setCategoryService(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/edit")
@@ -33,6 +40,7 @@ public class ProductsController {
         } else {
             product = new Product();
         }
+        model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("product", product);
         return "edit_product";
     }
