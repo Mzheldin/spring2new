@@ -9,6 +9,13 @@ CREATE TABLE users (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE categories (
+    id	            bigserial AUTO_INCREMENT,
+    title           VARCHAR(255) NOT NULL,
+    description     VARCHAR(5000),
+    PRIMARY KEY (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
 DROP TABLE IF EXISTS roles;
 CREATE TABLE roles (
   id                    serial,
@@ -42,7 +49,8 @@ VALUES
 (1, 3);
 
 DROP TABLE IF EXISTS products;
-CREATE TABLE products (id bigserial PRIMARY KEY, title varchar(255), price numeric(8, 2));
+CREATE TABLE products (id bigserial PRIMARY KEY, title varchar(255), category_id bigint NOT NULL, price numeric(8, 2), CONSTRAINT FK_CATEGORY_ID FOREIGN KEY (category_id)
+REFERENCES categories (id));
 INSERT INTO products (title, price) VALUES
 ('Cheese', 320.0),
 ('Milk', 90.0),
@@ -61,3 +69,6 @@ INSERT INTO products_images (product_id, path) VALUES
 (1, 'img_1.jpg'),
 (2, 'img_1.jpg'),
 (3, 'img_1.jpg');
+
+DROP TABLE IF EXISTS order_history;
+CREATE TABLE order_history (id bigserial PRIMARY KEY, order_id bigint, FOREIGN KEY (order_id) REFERENCES orders(id));
