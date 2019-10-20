@@ -87,6 +87,23 @@
             <scope>test</scope>
             <version>1.4.194</version>
         </dependency>
+
+        <!-- SOAP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+        </dependency>
+
+        <!-- PayPal -->
+        <dependency>
+            <groupId>com.paypal.sdk</groupId>
+            <artifactId>rest-api-sdk</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -102,6 +119,32 @@
                 <version>6.0.1</version>
                 <configuration>
                     <configFiles>src/main/resources/flyway.conf</configFiles>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <schemaDirectory>
+                        ${project.basedir}/src/main/resources/soap/
+                    </schemaDirectory>
+                    <outputDirectory>
+                        ${project.basedir}/src/main/java
+                    </outputDirectory>
+                    <clearOutputDir>
+                        false
+                    </clearOutputDir>
                 </configuration>
             </plugin>
         </plugins>

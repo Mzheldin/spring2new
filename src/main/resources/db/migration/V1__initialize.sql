@@ -29,7 +29,7 @@ CREATE TABLE users_roles (
 
 INSERT INTO roles (name)
 VALUES
-('ROLE_USER'), ('ROLE_MANAGER'), ('ROLE_ADMIN');
+('ROLE_CUSTOMER'), ('ROLE_MANAGER'), ('ROLE_ADMIN');
 
 INSERT INTO users (phone, password, first_name, last_name, email)
 VALUES
