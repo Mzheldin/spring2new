@@ -26,4 +26,14 @@ public class OrderService {
         cart.clear();
         return orderRepository.save(order);
     }
+
+    public Order findOrderById(Long id){
+        if (orderRepository.findById(id).isPresent())
+            return orderRepository.findById(id).get();
+        return null;
+    }
+
+    public Order saveOrder(Order order){
+        return orderRepository.save(order);
+    }
 }

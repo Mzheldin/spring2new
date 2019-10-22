@@ -1,11 +1,13 @@
 package com.geekbrains.septembermarket.paypal;
 
+import com.geekbrains.septembermarket.entities.Order;
+import com.geekbrains.septembermarket.services.OrderService;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,14 +18,21 @@ import java.util.List;
 @Controller
 @RequestMapping("/paypal")
 public class PayPalController {
-    private String clientId = "";
-    private String clientSecret = "";
+    private String clientId = "Af7vXvQm8q1xSzqPQaCEK05gzb7UlVmXHMcZ7KBbTYBGv0LYP3SIS_sUifeWH7s3j9qUGIGO-LqwyyMs";
+    private String clientSecret = "EJssbTNb4fYccomCJfRGu3OcWTziQWj57gnbwfZ0mKNbW4W-X03mQM5TzRc3yJ5W2cKQO-7H0eYyzIc4";
     private String mode = "sandbox";
 
     private APIContext apiContext = new APIContext(clientId, clientSecret, mode);
 
+    private OrderService orderService;
+
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
     @RequestMapping("/buy")
-    public String buy(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String buy(@ModelAttribute(name = "order") Order order, HttpServletRequest request, HttpServletResponse response, Model model) {
         try {
             Payer payer = new Payer();
             payer.setPaymentMethod("paypal");
@@ -33,7 +42,7 @@ public class PayPalController {
 
             Amount amount = new Amount();
             amount.setCurrency("RUB");
-            amount.setTotal("1.0");
+            amount.setTotal(order.getPrice().toString());
 
             Transaction transaction = new Transaction();
             transaction.setAmount(amount);
@@ -50,12 +59,9 @@ public class PayPalController {
 
             Payment doPayment = payment.create(apiContext);
 
-            Iterator<Links> links = doPayment.getLinks().iterator();
-
-            while (links.hasNext()) {
-                Links link = links.next();
+            for (Links link : doPayment.getLinks()) {
                 if (link.getRel().equalsIgnoreCase("approval_url")) {
-                    return "redirect:" + link.getHref();
+                    return link.getHref().equals("/success") ? "redirect:" + link.getHref() + "/" + order.getId() : "redirect:" + link.getHref();
                 }
             }
         } catch (Exception e) {
@@ -65,8 +71,8 @@ public class PayPalController {
         return "paypal-result";
     }
 
-    @GetMapping("/success")
-    public String success(HttpServletRequest request, HttpServletResponse response, Model model) {
+    @GetMapping("/success/{orderId}")
+    public String success(HttpServletRequest request, HttpServletResponse response, Model model, @PathVariable Long orderId) {
         try {
             String paymentId = request.getParameter("paymentId");
             String payerId = request.getParameter("PayerID");
@@ -84,6 +90,11 @@ public class PayPalController {
             Payment executedPayment = payment.execute(apiContext, paymentExecution);
 
             if (executedPayment.getState().equals("approved")) {
+                Order order = orderService.findOrderById(orderId);
+                if (order != null){
+                    order.setStatus(Order.Status.PAID);
+                    orderService.saveOrder(order);
+                }
                 model.addAttribute("message", "Ваш заказ сформирован");
             } else {
                 model.addAttribute("message", "Что-то пошло не так при формировании заказа, попробуйте повторить операцию");
