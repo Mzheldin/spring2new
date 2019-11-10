@@ -57,15 +57,6 @@
                    th:placeholder="#{filters.price.min}">
             <input th:value="${param.max != null} ? ${param.max}" class="form-control" th:name="max" type="number"
                    th:placeholder="#{filters.price.max}">
-            <select th:value="${param.category != null} ? ${param.category}"
-                    th:name="category"
-                    th:placeholder="#{filters.category}"
-                    class="form-control">
-                <option th:each="category: ${categories}"
-                        th:value="${category.id}"
-                        th:text="${category.title}" >
-                </option>
-            </select>
         </div>
         <br>
         <button type="submit" class="btn btn-primary" th:text="#{filters.submit}"></button>

@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -24,13 +23,8 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductImage> images;
-
-    @ManyToOne
-    @NotNull(message = "категория не выбрана")
-    @JoinColumn(name = "category_id")
-    private Category category;
 
     public Product(Long id, String title, BigDecimal price) {
         this.id = id;

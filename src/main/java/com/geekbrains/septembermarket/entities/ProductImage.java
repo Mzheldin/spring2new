@@ -22,4 +22,9 @@ public class ProductImage {
 
     @Column(name = "path")
     private String path;
+
+    @Override
+    public String toString() {
+        return "ProductImage";
+    }
 }

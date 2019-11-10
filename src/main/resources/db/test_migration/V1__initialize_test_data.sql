@@ -35,19 +35,8 @@ INSERT INTO users (phone, password, first_name, last_name, email)
 VALUES
 ('11111111','$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i','Admin','Admin','admin@gmail.com');
 
-INSERT INTO users_roles (user_id, role_id)
-VALUES
-(1, 1),
-(1, 2),
-(1, 3);
-
 DROP TABLE IF EXISTS products;
 CREATE TABLE products (id bigserial PRIMARY KEY, title varchar(255), price numeric(8, 2));
-INSERT INTO products (title, price) VALUES
-('Cheese', 320.0),
-('Milk', 90.0),
-('Apples', 120.0),
-('Nutella', 300.0);
 
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (id bigserial PRIMARY KEY, user_id bigint, price numeric(8, 2), phone varchar(15), address varchar(255), status varchar(255), created_at timestamp, updated_at timestamp, FOREIGN KEY (user_id) REFERENCES users (id));
@@ -58,7 +47,3 @@ total_price numeric(8, 2), FOREIGN KEY (order_id) REFERENCES orders(id), FOREIGN
 
 DROP TABLE IF EXISTS products_images;
 CREATE TABLE products_images (id bigserial PRIMARY KEY, product_id bigint, path varchar(255), FOREIGN KEY (product_id) REFERENCES products(id));
-INSERT INTO products_images (product_id, path) VALUES
-(1, 'img_1.jpg'),
-(2, 'img_1.jpg'),
-(3, 'img_1.jpg');

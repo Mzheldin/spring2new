@@ -1,6 +1,5 @@
 package com.geekbrains.septembermarket.paypal;
 
-import com.geekbrains.septembermarket.entities.Order;
 import com.geekbrains.septembermarket.services.OrderService;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,8 +18,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/paypal")
 public class PayPalController {
-    private String clientId = "Af7vXvQm8q1xSzqPQaCEK05gzb7UlVmXHMcZ7KBbTYBGv0LYP3SIS_sUifeWH7s3j9qUGIGO-LqwyyMs";
-    private String clientSecret = "EJssbTNb4fYccomCJfRGu3OcWTziQWj57gnbwfZ0mKNbW4W-X03mQM5TzRc3yJ5W2cKQO-7H0eYyzIc4";
+    private String clientId = "AQBPEMYGhUxgO3qAlU57hV-eL0kUqq5kdLs2uNoGKaw7m0fMUCMPwC7RoVj7ALSjv1COir5h2MT6NtER";
+    private String clientSecret = "EPA9mRuJvwkx8XiNNDWjwzTXcNL3_lNBXpCILXgfNe9MUWhYfXElD96RujVipi08LZQ0EZ4Leiw3ExcO";
     private String mode = "sandbox";
 
     private APIContext apiContext = new APIContext(clientId, clientSecret, mode);
@@ -31,14 +31,16 @@ public class PayPalController {
         this.orderService = orderService;
     }
 
-    @RequestMapping("/buy")
-    public String buy(@ModelAttribute(name = "order") Order order, HttpServletRequest request, HttpServletResponse response, Model model) {
+    @GetMapping("/buy/{orderId}")
+    public String buy(Model model, @PathVariable(name = "orderId") Long orderId, Principal principal) {
         try {
+            com.geekbrains.septembermarket.entities.Order order = orderService.findById(orderId);
+
             Payer payer = new Payer();
             payer.setPaymentMethod("paypal");
             RedirectUrls redirectUrls = new RedirectUrls();
             redirectUrls.setCancelUrl("http://localhost:8189/market/paypal/cancel");
-            redirectUrls.setReturnUrl("http://localhost:8189/market/paypal/success");
+            redirectUrls.setReturnUrl("http://localhost:8189/market/paypal/success/" + order.getId());
 
             Amount amount = new Amount();
             amount.setCurrency("RUB");
@@ -59,9 +61,12 @@ public class PayPalController {
 
             Payment doPayment = payment.create(apiContext);
 
-            for (Links link : doPayment.getLinks()) {
+            Iterator<Links> links = doPayment.getLinks().iterator();
+
+            while (links.hasNext()) {
+                Links link = links.next();
                 if (link.getRel().equalsIgnoreCase("approval_url")) {
-                    return link.getHref().equals("/success") ? "redirect:" + link.getHref() + "/" + order.getId() : "redirect:" + link.getHref();
+                    return "redirect:" + link.getHref();
                 }
             }
         } catch (Exception e) {
@@ -72,7 +77,7 @@ public class PayPalController {
     }
 
     @GetMapping("/success/{orderId}")
-    public String success(HttpServletRequest request, HttpServletResponse response, Model model, @PathVariable Long orderId) {
+    public String success(HttpServletRequest request, HttpServletResponse response, Model model, @PathVariable(name = "orderId") Long orderId) {
         try {
             String paymentId = request.getParameter("paymentId");
             String payerId = request.getParameter("PayerID");
@@ -90,12 +95,7 @@ public class PayPalController {
             Payment executedPayment = payment.execute(apiContext, paymentExecution);
 
             if (executedPayment.getState().equals("approved")) {
-                Order order = orderService.findOrderById(orderId);
-                if (order != null){
-                    order.setStatus(Order.Status.PAID);
-                    orderService.saveOrder(order);
-                }
-                model.addAttribute("message", "Ваш заказ сформирован");
+                model.addAttribute("message", "Ваш заказ #" + orderId + " сформирован и оплачен");
             } else {
                 model.addAttribute("message", "Что-то пошло не так при формировании заказа, попробуйте повторить операцию");
             }
@@ -107,7 +107,7 @@ public class PayPalController {
 
     @GetMapping("/cancel")
     public String cancel(Model model) {
-        model.addAttribute("message", "Оплата заказа не была проведена. Возможно Вы отменили ее...");
+        model.addAttribute("message", "Оплата заказа была отменена");
         return "paypal-result";
     }
 }

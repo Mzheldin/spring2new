@@ -10,11 +10,13 @@ import com.geekbrains.septembermarket.utils.Cart;
 import com.geekbrains.septembermarket.utils.SystemUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/orders")
@@ -57,9 +59,18 @@ public class OrderController {
             }
         }
         Order order = orderService.createOrder(user, phone, address);
-        if (user.getEmail() != null) {
-            mailService.sendOrderMail(order);
-        }
-        return "redirect:/shop";
+//        todo: enable email
+//        if (user.getEmail() != null) {
+//            mailService.sendOrderMail(order);
+//        }
+        return "redirect:/paypal/buy/" + order.getId();
+    }
+
+    @GetMapping("/history")
+    public String showHistory(Principal principal, Model model) {
+        User user = userService.findByPhone(principal.getName());
+        List<Order> userOrders = orderService.findAllByUser(user);
+        model.addAttribute("orders", userOrders);
+        return "orders-history";
     }
 }

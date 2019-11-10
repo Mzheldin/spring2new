@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderService {
     private OrderRepository orderRepository;
@@ -27,13 +29,11 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public Order findOrderById(Long id){
-        if (orderRepository.findById(id).isPresent())
-            return orderRepository.findById(id).get();
-        return null;
+    public List<Order> findAllByUser(User user) {
+        return orderRepository.findAllByUser(user);
     }
 
-    public Order saveOrder(Order order){
-        return orderRepository.save(order);
+    public Order findById(Long id) {
+        return orderRepository.findById(id).get();
     }
 }
