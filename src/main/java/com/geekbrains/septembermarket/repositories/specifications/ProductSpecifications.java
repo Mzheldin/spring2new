@@ -21,4 +21,10 @@ public class ProductSpecifications {
             return criteriaBuilder.lessThanOrEqualTo(root.get("price"), value);
         };
     }
+
+    public static Specification<Product> categoryId(Long id) {
+        return (Specification<Product>) (root, criteriaQuery, criteriaBuilder) -> {
+            return criteriaBuilder.equal(root.get("category").get("id"), id);
+        };
+    }
 }
