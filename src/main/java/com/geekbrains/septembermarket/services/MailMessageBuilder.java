@@ -1,6 +1,7 @@
 package com.geekbrains.septembermarket.services;
 
 
+import com.geekbrains.septembermarket.entities.News;
 import com.geekbrains.septembermarket.entities.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,11 @@ public class MailMessageBuilder {
         Context context = new Context();
         context.setVariable("order", order);
         return templateEngine.process("order-mail", context);
+    }
+
+    public String buildNewsEmail(News news) {
+        Context context = new Context();
+        context.setVariable("news", news);
+        return templateEngine.process("news-mail", context);
     }
 }

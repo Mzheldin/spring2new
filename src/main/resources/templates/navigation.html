@@ -36,6 +36,10 @@
                     th:classappend="${activeTab == 'AdminDashboard' ? 'active' : ''}">
                     <a class="nav-link" th:href="@{/admin}">Admin Dashboard</a>
                 </li>
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item"
+                    th:classappend="${activeTab == 'NewsPanel' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/news}">News Panel</a>
+                </li>
 
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <form th:action="@{/logout}" method="POST">

@@ -62,3 +62,6 @@ INSERT INTO products_images (product_id, path) VALUES
 (1, 'img_1.jpg'),
 (2, 'img_1.jpg'),
 (3, 'img_1.jpg');
+
+DROP TABLE IF EXISTS news;
+CREATE TABLE news (id bigserial PRIMARY KEY, title varchar(255), body varchar(1000), created_at timestamp);

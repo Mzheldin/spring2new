@@ -1,7 +1,9 @@
 package com.geekbrains.septembermarket.services;
 
 
+import com.geekbrains.septembermarket.entities.News;
 import com.geekbrains.septembermarket.entities.Order;
+import com.geekbrains.septembermarket.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,16 @@ public class MailService {
             logger.warn("Unable to create order mail message for order: " + order.getId());
         } catch (MailException e) {
             logger.warn("Unable to send order mail message for order: " + order.getId());
+        }
+    }
+
+    public void sendNewsMail(News news, User user) {
+        try {
+            sendMail(user.getEmail(), news.getTitle(), messageBuilder.buildNewsEmail(news));
+        } catch (MessagingException e) {
+            logger.warn("Unable to create news mail message for news: " + news.getId());
+        } catch (MailException e) {
+            logger.warn("Unable to send news mail message for news: " + news.getId());
         }
     }
 }
