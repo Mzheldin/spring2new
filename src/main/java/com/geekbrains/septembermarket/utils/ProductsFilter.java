@@ -38,5 +38,17 @@ public class ProductsFilter {
             specification = specification.and(ProductSpecifications.priceLesserThanOrEq(new BigDecimal(request.getParameter("max"))));
             filtersString.append("&max=" + request.getParameter("max"));
         }
+
+        if (request.getParameter("catId") != null && !request.getParameter("catId").isEmpty()) {
+            specification = specification.and(ProductSpecifications.categoryId(Long.valueOf(request.getParameter("catId"))));
+            filtersString.append("&catId=" + request.getParameter("catId"));
+        }
+
+//        Long[] cats = {1L, 2L};
+//        Specification<Product> specCat = Specification.where(null);
+//        for (int i = 0; i < cats.length; i++) {
+//            specCat = specCat.or(ProductSpecifications.categoryId(Long.valueOf(request.getParameter("catId"))));
+//        }
+//        specification = specification.and(specCat);
     }
 }

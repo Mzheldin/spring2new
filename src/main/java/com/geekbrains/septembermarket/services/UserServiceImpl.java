@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,10 +81,5 @@ public class UserServiceImpl implements UserService {
         user.setEmail(systemUser.getEmail());
         user.setRoles(Arrays.asList(roleRepository.findOneByName("ROLE_CUSTOMER")));
         return userRepository.save(user);
-    }
-
-    @Override
-    public List<User> findAllByRole(Role role) {
-        return userRepository.findAllByRolesContains(role);
     }
 }

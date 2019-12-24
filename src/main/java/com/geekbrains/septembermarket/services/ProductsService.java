@@ -35,4 +35,8 @@ public class ProductsService {
     public Product findById(Long id) {
         return productsRepository.findById(id).get();
     }
+
+    public List<Product> findByIds(Iterable<Long> ids) {
+        return (List<Product>)productsRepository.findAllById(ids);
+    }
 }

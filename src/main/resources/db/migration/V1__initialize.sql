@@ -41,13 +41,21 @@ VALUES
 (1, 2),
 (1, 3);
 
+DROP TABLE IF EXISTS categories;
+CREATE TABLE categories (
+  id                    serial,
+  name                  VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id)
+);
+INSERT INTO categories (name) VALUES ('Fruits'), ('Food');
+
 DROP TABLE IF EXISTS products;
-CREATE TABLE products (id bigserial PRIMARY KEY, title varchar(255), price numeric(8, 2));
-INSERT INTO products (title, price) VALUES
-('Cheese', 320.0),
-('Milk', 90.0),
-('Apples', 120.0),
-('Nutella', 300.0);
+CREATE TABLE products (id bigserial PRIMARY KEY, title varchar(255), price numeric(8, 2), category_id int, FOREIGN KEY (category_id) REFERENCES categories(id));
+INSERT INTO products (title, price, category_id) VALUES
+('Cheese', 320.0, 2),
+('Milk', 90.0, 2),
+('Apples', 120.0, 1),
+('Nutella', 300.0, 2);
 
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (id bigserial PRIMARY KEY, user_id bigint, price numeric(8, 2), phone varchar(15), address varchar(255), status varchar(255), created_at timestamp, updated_at timestamp, FOREIGN KEY (user_id) REFERENCES users (id));
@@ -62,6 +70,3 @@ INSERT INTO products_images (product_id, path) VALUES
 (1, 'img_1.jpg'),
 (2, 'img_1.jpg'),
 (3, 'img_1.jpg');
-
-DROP TABLE IF EXISTS news;
-CREATE TABLE news (id bigserial PRIMARY KEY, title varchar(255), body varchar(1000), created_at timestamp);

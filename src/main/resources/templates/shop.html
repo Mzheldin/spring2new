@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+4<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -15,6 +15,7 @@
             width:auto;
             height:auto;
         }
+
 
 
     </style>
@@ -57,6 +58,10 @@
                    th:placeholder="#{filters.price.min}">
             <input th:value="${param.max != null} ? ${param.max}" class="form-control" th:name="max" type="number"
                    th:placeholder="#{filters.price.max}">
+            <select th:name="catId">
+                <option th:text="'Не выбрана'" th:value="null" />
+                <option th:each="cat : ${categories}" th:text="${cat.name}" th:value="${cat.id}" />
+            </select>
         </div>
         <br>
         <button type="submit" class="btn btn-primary" th:text="#{filters.submit}"></button>
@@ -82,7 +87,7 @@
             <td>
                 <img class="table_image" th:src="@{'/image_repository/products/' + ${product.id} + '/img_1.jpg'}">
             </td>
-            <td th:text="${product.title}"/>
+            <td><a th:href="@{'/products/' + ${product.id}}" th:text="${product.title}"/></td>
             <td th:text="${product.price}"/>
             <td>
                 <a class="btn btn-primary" th:href="@{'/cart/add?id=' + ${product.id}}">Add to Cart</a>
@@ -109,6 +114,26 @@
             </li>
         </ul>
     </nav>
+
+    <div th:if="${lastViewed != null}">
+        <h4>Последние просмотренные товары:</h4>
+        <table class="table table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th></th>
+                <th>Название товара</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${lastViewed}">
+                <td>
+                    <img class="table_image" th:src="@{'/image_repository/products/' + ${product.id} + '/img_1.jpg'}">
+                </td>
+                <td><a th:href="@{'/products/' + ${product.id}}" th:text="${product.title}"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 </body>

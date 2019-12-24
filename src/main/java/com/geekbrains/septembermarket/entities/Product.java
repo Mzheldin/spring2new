@@ -1,5 +1,6 @@
 package com.geekbrains.septembermarket.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,7 +24,12 @@ public class Product {
     @Column(name = "price")
     private BigDecimal price;
 
+    @ManyToOne()
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ProductImage> images;
 
     public Product(Long id, String title, BigDecimal price) {
